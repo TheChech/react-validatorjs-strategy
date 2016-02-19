@@ -2,7 +2,7 @@ var Validator = require('validatorjs');
 
 describe('strategy', function() {
     beforeEach(function () {
-        this.strategy = require('../src/strategy');
+        this.strategy = require('../dist/strategy').default;
 
         this.rules = {
             name: 'required',
@@ -219,8 +219,6 @@ describe('strategy', function() {
 
             it('should reject a promise with error messages with invalid input', function (done) {
                 this.strategy.validateServer(this.data, this.schema).catch((error) => {
-                    expect(error).toEqual(jasmine.any(this.strategy.Error));
-
                     expect(error.errors).toEqual({
                         email: ['This is not a valid email address'],
                         confirm_email: ['The confirm email format is invalid.']

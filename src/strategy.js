@@ -5,11 +5,9 @@
  * @see https://jurassix.gitbooks.io/docs-react-validation-mixin/content/overview/strategies.html
  */
 
-'use strict';
+import Validator from 'validatorjs';
 
-var Validator = require('validatorjs');
-
-var strategy = {
+export default {
     /**
      * Used to create this.validatorTypes in a React component and to be passed to validate or validateServer
      *
@@ -34,7 +32,7 @@ var strategy = {
      * @returns {Object}
      */
     createInactiveSchema(rules, messages, callback) {
-        var schema = this.createSchema(rules, messages, callback);
+        const schema = this.createSchema(rules, messages, callback);
         schema.activeRules = [];
 
         return schema;
@@ -59,7 +57,7 @@ var strategy = {
      * @returns {Validator}
      */
     createValidator(data, schema, forceActive) {
-        var rules = {};
+        let rules = {};
 
         // Only add active rules to the validator if an initially inactive schema has been created.
         if (typeof schema.activeRules !== 'undefined') {
@@ -77,7 +75,7 @@ var strategy = {
             rules = schema.rules;
         }
 
-        var validator = new Validator(data, rules, schema.messages);
+        const validator = new Validator(data, rules, schema.messages);
 
         // If a callback has been specified on the schema, call it to allow customisation of the validator
         if (typeof schema.callback === 'function') {
@@ -96,10 +94,10 @@ var strategy = {
      */
     validate(data, schema, options, callback) {
         // If the whole form has been submitted, then activate all rules
-        var forceActive = !options.key;
-        var validator = this.createValidator(data, schema, forceActive);
+        const forceActive = !options.key;
+        const validator = this.createValidator(data, schema, forceActive);
 
-        var getErrors = () => {
+        const getErrors = () => {
             // If a single element is being validated, just get those errors.
             // Otherwise get all of them.
             if (options.key) {
@@ -122,7 +120,7 @@ var strategy = {
      * @returns {Promise}
      */
     validateServer(data, schema) {
-        var validator = this.createValidator(data, schema, true);
+        const validator = this.createValidator(data, schema, true);
 
         return new Promise((resolve, reject) => {
             validator.checkAsync(
@@ -130,7 +128,7 @@ var strategy = {
                     resolve();
                 },
                 () => {
-                    var e = new this.Error('A validation error occurred');
+                    const e = new this.Error('A validation error occurred');
                     e.errors = validator.errors.all();
 
                     reject(e);
@@ -146,13 +144,3 @@ var strategy = {
      */
     Error: class extends Error {}
 };
-
-// If in the browser, export as a global window variable.
-if (typeof window !== "undefined" && typeof window.strategy === "undefined") {
-    window.strategy = strategy;
-}
-
-// If being loaded as a module
-if (typeof module !== "undefined") {
-    module.exports = strategy;
-}

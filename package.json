@@ -2,8 +2,7 @@
   "name": "react-validatorjs-strategy",
   "version": "0.1.7",
   "description": "Strategy for using validatorjs with react-validation-mixin",
-  "main": "./src/strategy.js",
-  "browser": "./dist/strategy.js",
+  "main": "./dist/strategy.js",
   "dependencies": {
     "validatorjs": "2.0.5"
   },
@@ -11,7 +10,6 @@
     "babel-cli": "^6.5.1",
     "babel-core": "^6.4.5",
     "babel-loader": "^6.2.2",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.5.2",
     "babel-plugin-transform-es2015-modules-umd": "^6.5.0",
     "babel-preset-es2015": "^6.3.13",
     "babelify": "^7.2.0",
@@ -24,8 +22,9 @@
     "test": "jasmine-node tests",
     "webpack:dev": "webpack --dev",
     "webpack": "webpack",
-    "build:cjs": "babel ./src/strategy.js --presets es2015 --plugins transform-es2015-modules-commonjs -o ./dist/strategy-cjs.js -v",
-    "build:umd": "babel ./src/strategy.js --presets es2015 --plugins transform-es2015-modules-umd -o ./dist/strategy-umd.js -v"
+    "build": "babel --presets es2015 src -d dist",
+    "build:umd": "babel ./src/strategy.js --presets es2015 --plugins transform-es2015-modules-umd -o ./dist/strategy-umd.js -v",
+    "prepublish": "npm run build && npm run build:umd"
   },
   "repository": {
     "type": "git",
