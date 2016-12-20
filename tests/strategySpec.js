@@ -252,8 +252,6 @@ describe('strategy validation client-side with an inactive schema and language',
 			confirm_email: 'required|email'
 		};
 
-		this.messages = null;
-
 		this.data = {
 			name: '',
 			email: 'not-an-email-address',
