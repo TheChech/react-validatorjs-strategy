@@ -241,3 +241,124 @@ describe('strategy', function() {
         });
     });
 });
+
+describe('strategy validation client-side with an inactive schema and language', function () {	
+	beforeEach(function () {
+		this.strategy = require('../lib/strategy');
+
+		this.rules = {
+			name: 'required',
+			email: 'required|email',
+			confirm_email: 'required|email'
+		};
+
+		this.data = {
+			name: '',
+			email: 'not-an-email-address',
+			confirm_email: 'also-invalid'
+		};
+		
+		this.validateCallback = jasmine.createSpy('validateCallback');
+	});	
+	
+	it('ru', function () {
+		this.schemaCallback = function (validator) {
+			validator.lang = 'ru';
+		}
+		this.schema = this.strategy.createInactiveSchema(this.rules, null, this.schemaCallback);					
+		
+		this.strategy.validate(
+			this.data,
+			this.schema,
+			{},
+			this.validateCallback
+		);
+
+		expect(this.validateCallback).toHaveBeenCalledWith({
+			name: ["Поле name обязательно для заполнения."],
+			email: ["Поле email должно быть действительным электронным адресом."],
+			confirm_email: ["Поле confirm email должно быть действительным электронным адресом."]
+		});
+	}); 
+	
+	it('de', function () {
+		this.schemaCallback = function (validator) {
+			validator.lang = 'de';
+		}
+		this.schema = this.strategy.createInactiveSchema(this.rules, null, this.schemaCallback);					
+		
+		this.strategy.validate(
+			this.data,
+			this.schema,
+			{},
+			this.validateCallback
+		);
+
+		expect(this.validateCallback).toHaveBeenCalledWith({
+			name: ["Das name Feld muss ausgefüllt sein."],
+			email: ["Das email Format ist ungültig."],
+			confirm_email: ["Das confirm email Format ist ungültig."]
+		});
+	});
+	
+	it('es', function () {
+		this.schemaCallback = function (validator) {
+			validator.lang = 'es';
+		}
+		this.schema = this.strategy.createInactiveSchema(this.rules, null, this.schemaCallback);					
+		
+		this.strategy.validate(
+			this.data,
+			this.schema,
+			{},
+			this.validateCallback
+		);
+
+		expect(this.validateCallback).toHaveBeenCalledWith({
+			name: ["El campo name es obligatorio."],
+			email: ["El campo email no es un correo válido"],
+			confirm_email: ["El campo confirm email no es un correo válido"]
+		});
+	});
+	
+	it('fr', function () {
+		this.schemaCallback = function (validator) {
+			validator.lang = 'fr';
+		}
+		this.schema = this.strategy.createInactiveSchema(this.rules, null, this.schemaCallback);					
+		
+		this.strategy.validate(
+			this.data,
+			this.schema,
+			{},
+			this.validateCallback
+		);
+
+		expect(this.validateCallback).toHaveBeenCalledWith({
+			name: ["Le champs name est obligatoire."],
+			email: ["Le champs email contient un format invalide."],
+			confirm_email: ["Le champs confirm email contient un format invalide."]
+		});
+	});
+	
+	it('it', function () {
+		this.schemaCallback = function (validator) {
+			validator.lang = 'it';
+		}
+		this.schema = this.strategy.createInactiveSchema(this.rules, null, this.schemaCallback);					
+		
+		this.strategy.validate(
+			this.data,
+			this.schema,
+			{},
+			this.validateCallback
+		);
+
+		expect(this.validateCallback).toHaveBeenCalledWith({
+			name: ["Il campo name è richiesto."],
+			email: ["Il formato dell\'attributo email non è valido."],
+			confirm_email: ["Il formato dell\'attributo confirm email non è valido."]
+		});
+	});
+	
+});

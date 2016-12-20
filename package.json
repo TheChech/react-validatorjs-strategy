@@ -17,7 +17,7 @@
   "scripts": {
     "start": "npm install && npm run build && npm run watch",
     "watch": "onchange './lib/strategy.js' -- npm run build",
-    "test": "jasmine-node tests",
+    "test": "jasmine-node tests --verbose",
     "build": "npm run build:umd",
     "build:umd": "babel ./lib/strategy.js --plugins transform-es2015-modules-umd | uglifyjs -o ./dist/strategy.min.js  --"
   },
